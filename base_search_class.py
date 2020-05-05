@@ -28,6 +28,8 @@ class BaseSearch:
             from selenium.webdriver.chrome.options import Options
             options = Options()
             options.headless = True
+            if self.require_user_agent:
+                self.headers['user-agent'] =  self.user_agent.random
             options.add_argument('user-agent={0}'.format(self.headers['user-agent']))
             self.driver = webdriver.Chrome(chrome_options=options)
         self.start_search()
@@ -53,8 +55,6 @@ class BaseSearch:
             print('{}: failed to find results.'.format(self.vendor_name))
 
     def start_search(self):
-        if self.require_user_agent:
-            self.headers['user-agent'] =  self.user_agent.random
         if self.javascript:
             self.driver.implicitly_wait(10)
             self.driver.get(self.search_url)
